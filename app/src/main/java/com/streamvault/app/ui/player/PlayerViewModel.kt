@@ -90,8 +90,8 @@ class PlayerViewModel @Inject constructor(
                     "series" -> "mp4"
                     else -> "m3u8"
                 }
-                val url = repository.buildStreamUrl(type, streamId, extension)
 
+                val url = repository.buildStreamUrl(type, streamId, extension)
                 val mediaItem = MediaItem.Builder()
                     .setUri(url)
                     .build()
@@ -217,11 +217,10 @@ class PlayerViewModel @Inject constructor(
         // Toggle subtitle visibility
         trackSelector?.let { selector ->
             val params = selector.parameters
-            if (params.disabledTextTrackSelectionFlags > 0) {
-                selector.setParameters(params.buildUpon().setRendererDisabled(C.TRACK_TYPE_TEXT, false))
-            } else {
-                selector.setParameters(params.buildUpon().setRendererDisabled(C.TRACK_TYPE_TEXT, true))
-            }
+            val isCurrentlyDisabled = params.disabledTrackTypes.contains(C.TRACK_TYPE_TEXT)
+            selector.setParameters(
+                params.buildUpon().setRendererDisabled(C.TRACK_TYPE_TEXT, !isCurrentlyDisabled)
+            )
         }
     }
 
