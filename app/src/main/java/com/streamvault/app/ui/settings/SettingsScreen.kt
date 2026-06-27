@@ -111,7 +111,7 @@ fun SettingsScreen(
                     InfoRow("Versión", appInfo.version)
                     InfoRow("Build", appInfo.buildNumber)
                     InfoRow("Paquete", appInfo.packageName)
-                    HorizontalDivider(
+                    Divider(
                         modifier = Modifier.padding(vertical = 8.dp),
                         color = DarkSurfaceVariant
                     )
@@ -159,7 +159,7 @@ fun SettingsScreen(
 @Composable
 private fun AccountCard(
     userInfo: UserInfo,
-    activeConfig: ServerConfigEntity?
+    activeConfig: ServerConfig?
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -210,7 +210,7 @@ private fun AccountCard(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            HorizontalDivider(color = DarkSurface.copy(alpha = 0.5f))
+            Divider(color = DarkSurface.copy(alpha = 0.5f))
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(
