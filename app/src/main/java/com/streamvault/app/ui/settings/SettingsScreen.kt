@@ -159,7 +159,7 @@ fun SettingsScreen(
 @Composable
 private fun AccountCard(
     userInfo: UserInfo,
-    activeConfig: ServerConfig?
+    activeConfig: ServerConfigEntity?
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -186,7 +186,9 @@ private fun AccountCard(
                         modifier = Modifier.size(28.dp)
                     )
                 }
+
                 Spacer(modifier = Modifier.width(12.dp))
+
                 Column {
                     Text(
                         text = userInfo.username ?: "Usuario",
@@ -423,6 +425,7 @@ fun AddServerDialog(
                         unfocusedLabelColor = TextSecondary
                     )
                 )
+
                 OutlinedTextField(
                     value = url,
                     onValueChange = { url = it },
@@ -438,6 +441,7 @@ fun AddServerDialog(
                         unfocusedLabelColor = TextSecondary
                     )
                 )
+
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
@@ -452,6 +456,7 @@ fun AddServerDialog(
                         unfocusedLabelColor = TextSecondary
                     )
                 )
+
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
