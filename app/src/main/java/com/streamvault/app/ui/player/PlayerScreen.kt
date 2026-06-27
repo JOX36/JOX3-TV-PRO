@@ -11,6 +11,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -487,12 +490,12 @@ private fun ChannelGridOverlay(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
-                columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(120.dp),
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(120.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                androidx.compose.foundation.lazy.grid.items(channels.size) { index ->
+                items(channels.size) { index ->
                     val channel = channels[index]
                     val isCurrentChannel = channel.streamId == currentStreamId
 
@@ -504,7 +507,7 @@ private fun ChannelGridOverlay(
                         shape = RoundedCornerShape(8.dp),
                         color = if (isCurrentChannel) CyanPrimary.copy(alpha = 0.2f) else DarkSurfaceVariant,
                         border = if (isCurrentChannel) {
-                            androidx.compose.foundation.BorderStroke(1.dp, CyanPrimary)
+                            BorderStroke(1.dp, CyanPrimary)
                         } else null
                     ) {
                         Column(

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -297,7 +298,7 @@ private fun ServerConfigCard(
             containerColor = if (isActive) CyanPrimary.copy(alpha = 0.1f) else DarkSurfaceVariant
         ),
         border = if (isActive) {
-            androidx.compose.foundation.BorderStroke(1.dp, CyanPrimary.copy(alpha = 0.3f))
+            BorderStroke(1.dp, CyanPrimary.copy(alpha = 0.3f))
         } else null
     ) {
         Row(
