@@ -70,6 +70,17 @@ android {
     }
 }
 
+// Fuerza una versión única y consistente de Compose Animation en todo el
+// árbol de dependencias. Esto evita NoSuchMethodError en runtime causado
+// por librerías transitivas (como Accompanist) que traen una versión
+// distinta de animation-core a la del compose-bom declarado abajo.
+configurations.all {
+    resolutionStrategy {
+        force("androidx.compose.animation:animation-core:1.6.1")
+        force("androidx.compose.animation:animation:1.6.1")
+    }
+}
+
 dependencies {
     // Core
     implementation("androidx.core:core-ktx:1.12.0")
