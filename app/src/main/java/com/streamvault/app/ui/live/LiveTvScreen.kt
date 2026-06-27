@@ -95,7 +95,8 @@ fun LiveTvScreen(
         }
 
         // Category chips
-        when (categories) {
+        val categoriesState = categories
+        when (categoriesState) {
             is Resource.Success -> {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -114,7 +115,8 @@ fun LiveTvScreen(
                             )
                         )
                     }
-                    items(categories.data) { cat ->
+
+                    items(categoriesState.data) { cat ->
                         FilterChip(
                             selected = selectedCategory?.categoryId == cat.categoryId,
                             onClick = { viewModel.selectCategory(cat) },
@@ -133,19 +135,20 @@ fun LiveTvScreen(
         }
 
         // Content
-        when (streams) {
+        val streamsState = streams
+        when (streamsState) {
             is Resource.Loading -> LoadingIndicator()
             is Resource.Error -> ErrorMessage(
-                message = streams.message,
+                message = streamsState.message,
                 onRetry = { viewModel.loadData() }
             )
             is Resource.Success -> {
                 val filteredStreams = if (searchQuery.isNotEmpty()) {
-                    streams.data.filter {
+                    streamsState.data.filter {
                         it.name.contains(searchQuery, ignoreCase = true)
                     }
                 } else {
-                    streams.data
+                    streamsState.data
                 }
 
                 if (filteredStreams.isEmpty()) {
