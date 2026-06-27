@@ -71,7 +71,8 @@ fun SeriesScreen(
             ) {}
         }
 
-        when (categories) {
+        val categoriesState = categories
+        when (categoriesState) {
             is Resource.Success -> {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -90,7 +91,8 @@ fun SeriesScreen(
                             )
                         )
                     }
-                    items(categories.data) { cat ->
+
+                    items(categoriesState.data) { cat ->
                         FilterChip(
                             selected = selectedCategory?.categoryId == cat.categoryId,
                             onClick = { viewModel.selectCategory(cat) },
@@ -108,13 +110,14 @@ fun SeriesScreen(
             else -> {}
         }
 
-        when (series) {
+        val seriesState = series
+        when (seriesState) {
             is Resource.Loading -> LoadingIndicator()
-            is Resource.Error -> ErrorMessage(message = series.message, onRetry = { viewModel.loadData() })
+            is Resource.Error -> ErrorMessage(message = seriesState.message, onRetry = { viewModel.loadData() })
             is Resource.Success -> {
                 val filtered = if (searchQuery.isNotEmpty()) {
-                    series.data.filter { it.name.contains(searchQuery, ignoreCase = true) }
-                } else series.data
+                    seriesState.data.filter { it.name.contains(searchQuery, ignoreCase = true) }
+                } else seriesState.data
 
                 if (filtered.isEmpty()) {
                     EmptyState(
