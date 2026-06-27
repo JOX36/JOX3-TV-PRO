@@ -22,11 +22,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideDynamicUrlInterceptor(): DynamicUrlInterceptor = DynamicUrlInterceptor()
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(dynamicUrlInterceptor: DynamicUrlInterceptor): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
         }
+
         return OkHttpClient.Builder()
+            .addInterceptor(dynamicUrlInterceptor)
             .addInterceptor(logging)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
