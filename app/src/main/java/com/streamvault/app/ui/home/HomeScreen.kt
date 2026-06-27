@@ -275,7 +275,7 @@ private fun TvHomeContent(
     ) {
         item {
             Text(
-                text = "StreamVault",
+                text = "JOX3 TV",
                 style = MaterialTheme.typography.displaySmall,
                 color = CyanPrimary
             )

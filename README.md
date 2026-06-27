@@ -1,4 +1,4 @@
-# StreamVault 🎬
+# JOX3 TV 🎬
 
 App nativa de Android para reproducción IPTV con diseño futurista en cyan y azul eléctrico.
 

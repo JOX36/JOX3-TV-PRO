@@ -54,7 +54,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun StreamVaultTheme(
+fun JOX3TVTheme(
     darkTheme: Boolean = true, // Default dark for IPTV app
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
