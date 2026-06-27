@@ -2,6 +2,7 @@ package com.streamvault.app.data
 
 import com.streamvault.app.api.XtreamApi
 import com.streamvault.app.data.models.*
+import com.streamvault.app.di.DynamicUrlInterceptor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -12,14 +13,17 @@ class XtreamRepository @Inject constructor(
     private val api: XtreamApi,
     private val favoritesDao: FavoritesDao,
     private val historyDao: WatchHistoryDao,
-    private val configDao: ServerConfigDao
+    private val configDao: ServerConfigDao,
+    private val dynamicUrlInterceptor: DynamicUrlInterceptor
 ) {
+
     private var currentConfig: ServerConfig? = null
 
     fun getConfig(): ServerConfig? = currentConfig
 
     suspend fun setActiveConfig(config: ServerConfig) {
         currentConfig = config
+        dynamicUrlInterceptor.baseUrl = config.baseUrl
     }
 
     suspend fun getActiveDbConfig(): ServerConfigEntity? = configDao.getActiveConfig()
@@ -35,24 +39,29 @@ class XtreamRepository @Inject constructor(
     suspend fun activateServer(config: ServerConfigEntity) {
         configDao.deactivateAll()
         configDao.update(config.copy(isActive = true))
+
         currentConfig = ServerConfig(
             name = config.name,
             url = config.url,
             username = config.username,
             password = config.password
         )
+        dynamicUrlInterceptor.baseUrl = currentConfig!!.baseUrl
     }
 
     private fun requireConfig(): ServerConfig =
         currentConfig ?: throw IllegalStateException("No server configured")
 
     // ─── Auth ──────────────────────────────────────────────────
+
     suspend fun authenticate(config: ServerConfig): UserAuthResponse {
         currentConfig = config
+        dynamicUrlInterceptor.baseUrl = config.baseUrl
         return api.authenticate(config.username, config.password)
     }
 
     // ─── Live ──────────────────────────────────────────────────
+
     fun getLiveCategories(): Flow<Resource<List<Category>>> = flow {
         emit(Resource.Loading)
         try {
@@ -87,6 +96,7 @@ class XtreamRepository @Inject constructor(
     }
 
     // ─── VOD ───────────────────────────────────────────────────
+
     fun getVodCategories(): Flow<Resource<List<Category>>> = flow {
         emit(Resource.Loading)
         try {
@@ -126,6 +136,7 @@ class XtreamRepository @Inject constructor(
     }
 
     // ─── Series ────────────────────────────────────────────────
+
     fun getSeriesCategories(): Flow<Resource<List<Category>>> = flow {
         emit(Resource.Loading)
         try {
@@ -165,15 +176,20 @@ class XtreamRepository @Inject constructor(
     }
 
     // ─── EPG ───────────────────────────────────────────────────
+
     suspend fun getShortEpg(streamId: String): EpgResponse {
         val cfg = requireConfig()
         return api.getShortEpg(cfg.username, cfg.password, streamId = streamId)
     }
 
     // ─── Favorites ─────────────────────────────────────────────
+
     fun getAllFavorites(): Flow<List<FavoriteEntity>> = favoritesDao.getAllFavorites()
+
     fun getFavoritesByType(type: String): Flow<List<FavoriteEntity>> = favoritesDao.getFavoritesByType(type)
+
     suspend fun isFavorite(id: Int): Boolean = favoritesDao.isFavorite(id)
+
     suspend fun toggleFavorite(fav: FavoriteEntity) {
         if (favoritesDao.isFavorite(fav.id)) {
             favoritesDao.deleteById(fav.id)
@@ -183,11 +199,15 @@ class XtreamRepository @Inject constructor(
     }
 
     // ─── History ───────────────────────────────────────────────
+
     fun getRecentHistory(limit: Int = 50): Flow<List<WatchHistoryEntity>> = historyDao.getRecentHistory(limit)
+
     suspend fun addToHistory(item: WatchHistoryEntity) = historyDao.insert(item)
+
     suspend fun clearHistory() = historyDao.clearAll()
 
     // ─── Stream URL Builder ────────────────────────────────────
+
     fun buildStreamUrl(type: String, streamId: Int, extension: String = "m3u8"): String {
         val cfg = requireConfig()
         return cfg.streamUrl(type, extension, streamId)
