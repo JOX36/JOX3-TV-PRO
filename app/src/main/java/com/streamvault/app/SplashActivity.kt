@@ -13,9 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.view.WindowCompat
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -492,7 +492,7 @@ private fun ChannelGridOverlay(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(channels.size) { index ->
+                androidx.compose.foundation.lazy.grid.items(channels.size) { index ->
                     val channel = channels[index]
                     val isCurrentChannel = channel.streamId == currentStreamId
 
