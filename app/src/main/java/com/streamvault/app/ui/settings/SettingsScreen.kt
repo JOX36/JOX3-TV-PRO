@@ -159,7 +159,7 @@ fun SettingsScreen(
 @Composable
 private fun AccountCard(
     userInfo: UserInfo,
-    activeConfig: ServerConfig?
+    activeConfig: ServerConfigEntity?
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
