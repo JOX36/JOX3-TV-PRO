@@ -4,8 +4,10 @@ import android.app.PictureInPictureParams
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Rational
+import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -55,7 +57,6 @@ fun PlayerScreen(
     val audioTracks by viewModel.audioTracks.collectAsState()
     val subtitleTracks by viewModel.subtitleTracks.collectAsState()
     val showTrackSelector by viewModel.showTrackSelector.collectAsState()
-
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(type, streamId) {
@@ -336,6 +337,7 @@ private fun PlayerControlsOverlay(
                         style = MaterialTheme.typography.labelSmall,
                         color = Color.White
                     )
+
                     Slider(
                         value = if (duration > 0) currentPosition.toFloat() / duration else 0f,
                         onValueChange = { /* seek */ },
@@ -348,6 +350,7 @@ private fun PlayerControlsOverlay(
                             inactiveTrackColor = Color.White.copy(alpha = 0.3f)
                         )
                     )
+
                     Text(
                         text = formatTime(duration),
                         style = MaterialTheme.typography.labelSmall,
@@ -371,21 +374,25 @@ private fun PlayerControlsOverlay(
                         onClick = onChannelGrid
                     )
                 }
+
                 ControlChip(
                     icon = Icons.Filled.Subtitles,
                     label = "Subtítulos",
                     onClick = onToggleSubtitles
                 )
+
                 ControlChip(
                     icon = Icons.Filled.AudioFile,
                     label = "Audio",
                     onClick = onToggleAudio
                 )
+
                 ControlChip(
                     icon = Icons.Filled.Tune,
                     label = "Ajustes",
                     onClick = onShowTrackSelector
                 )
+
                 ControlChip(
                     icon = Icons.Filled.ScreenLockPortrait,
                     label = "Bloquear",
@@ -553,6 +560,7 @@ private fun TrackSelectorDialog(
                     color = TextPrimary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
                 audioTracks.forEachIndexed { index, track ->
                     Surface(
                         onClick = {
